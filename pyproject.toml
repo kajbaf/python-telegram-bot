@@ -1,7 +1,76 @@
 [tool.black]
 line-length = 99
-target-version = ['py37', 'py38', 'py39', 'py310']
+target-version = ['py37']
+skip-string-normalization = true
 
-[tool.isort]  # black config
-profile = "black"
-line_length = 99
+# We need to force-exclude the negated include pattern
+# so that pre-commit run --all-files does the correct thing
+# see https://github.com/psf/black/issues/1778
+force-exclude = '^(?!/(telegram|examples|tests)/).*\.py$'
+include = '(telegram|examples|tests)/.*\.py$'
+exclude = 'telegram/vendor'
+
+[tool.poetry]
+name = "python-telegram-bot"
+version = "14.0.0"
+description = "We have made you a wrapper you can't refuse"
+readme = "README.rst"
+authors = ["Leandro Toledo <devs@python-telegram-bot.org>"]
+license = "LGPLv3"
+keywords=["python", "telegram", "bot", "apii", "wrapper"]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+    'Operating System :: OS Independent',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Communications :: Chat',
+    'Topic :: Internet',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+]
+homepage = 'https://python-telegram-bot.org/'
+repository = 'https://github.com/python-telegram-bot/python-telegram-bot'
+documentation = 'https://python-telegram-bot.readthedocs.io'
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/python-telegram-bot/python-telegram-bot/issues"
+"News" = "https://t.me/pythontelegrambotchannel"
+"Changelog" = "https://python-telegram-bot.readthedocs.io/en/stable/changelog.html"
+
+[tool.poetry.extras]
+json = ['ujson']
+socks = ['PySocks']
+passport = ['cryptography!=3.4,!=3.4.1,!=3.4.2,!=3.4.3']  # 3.4-3.4.3 contained some cyclical import bugs
+
+[tool.poetry.dependencies]
+python = "^3.6.8"
+certifi = "^2021.10.8"
+tornado = ">=6.1"
+APScheduler = "3.6.3"
+pytz = ">=2018.6"
+cachetools = "4.2.2"
+ujson = {version = "^4.2.0", optional = true}
+PySocks = {version = "^1.7.1", optional = true}
+cryptography = {version = "!=3.4,!=3.4.1,!=3.4.2,!=3.4.3", optional = true}
+
+[tool.poetry.dev-dependencies]
+cryptography = "!=3.4,!=3.4.1,!=3.4.2,!=3.4.3"
+pre-commit = "^2.15.0"
+black = "20.8b1"
+flake8 = "3.9.2"
+pylint = "2.10.2"
+mypy = "0.910"
+pyupgrade = "2.24.0"
+pytest = "6.2.4"
+flaky = "^3.7.0"
+beautifulsoup4 = "^4.10.0"
+wheel = "^0.37.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
